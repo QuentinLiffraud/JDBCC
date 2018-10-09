@@ -84,7 +84,7 @@ public class DAO {
 		//throw new UnsupportedOperationException("Pas encore implémenté");
                 
 // Une requête SQL paramétrée
-                int result = 0;
+                int res = 0;
 		String sql = "SELECT COUNT(CUSTOMER_ID) AS NUMBER FROM PURCHASE_ORDER WHERE CUSTOMER_ID = ?";
 		try (   Connection connection = myDataSource.getConnection();
 			PreparedStatement stmt = connection.prepareStatement(sql)
@@ -96,14 +96,14 @@ public class DAO {
                         
                         if (rs.next()) { // Pas la peine de faire while, il y a 1 seul enregistrement
 				// On récupère le champ NUMBER de l'enregistrement courant
-				result = rs.getInt("NUMBER");
+				res = rs.getInt("NUMBER");
 			}
 
 		}  catch (SQLException ex) {
 			Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
 			throw new DAOException(ex.getMessage());
 		}
-                return result;
+                return res;
 	
 	}
 
@@ -116,9 +116,9 @@ public class DAO {
 	 */
 	CustomerEntity findCustomer(int customerID) throws DAOException {
 		
-		String sql = "SELECT NAME AS NOM,ADDRESSLINE1 AS ADRESS FROM CUSTOMER WHERE CUSTOMER_ID = ?";
-                String NAME ="";
-                String ADDRESSLINE1="";
+		String sql = "SELECT NAME AS NOM,ADDRESSLINE1 AS ADRESSE FROM CUSTOMER WHERE CUSTOMER_ID = ?";
+                String NOMM ="";
+                String ADDRESSE="";
 		try (   Connection connection = myDataSource.getConnection();
 			PreparedStatement stmt = connection.prepareStatement(sql)
                 ) {
@@ -130,8 +130,8 @@ public class DAO {
                         while (rs.next()) { 
 				// On récupère le champ NUMBER de l'enregistrement courant
 				
-                                NAME= rs.getString("NOM");
-                                ADDRESSLINE1=rs.getString("ADRESS");
+                                NOMM= rs.getString("NOM");
+                                ADDRESSE=rs.getString("ADRESSE");
                                 
 			}
 
@@ -139,7 +139,7 @@ public class DAO {
 			Logger.getLogger("DAO").log(Level.SEVERE, null, ex);
 			throw new DAOException(ex.getMessage());
 		}
-                CustomerEntity Ce = new CustomerEntity(customerID,NAME,ADDRESSLINE1);
+                CustomerEntity Ce = new CustomerEntity(customerID,NOMM,ADDRESSE);
                 return Ce;
 	}
 
@@ -151,11 +151,11 @@ public class DAO {
 	 * @throws DAOException
 	 */
 	List<CustomerEntity> customersInState(String state) throws DAOException {
-		String sql = "SELECT CUSTOMER_ID AS CUSTOM, NAME AS NOM, ADDRESSLINE1 AS ADRESS FROM APP.CUSTOMER WHERE STATE = ?";
-                String NAME ="";
-                String ADDRESSLINE1="";
-                int C;
-                ArrayList <CustomerEntity> ListCustom = new ArrayList<CustomerEntity>() ;
+		String sql = "SELECT CUSTOMER_ID AS CUSTOM, NAME AS NOM, ADDRESSLINE1 AS ADRESSE FROM APP.CUSTOMER WHERE STATE = ?";
+                String NOMM ="";
+                String ADDRESSE="";
+                int customer;
+                ArrayList <CustomerEntity> ListCustomers = new ArrayList<CustomerEntity>() ;
 		try (   Connection connection = myDataSource.getConnection();
 			PreparedStatement stmt = connection.prepareStatement(sql)
                 ) {
@@ -166,11 +166,11 @@ public class DAO {
                         
                         while (rs.next()) { 
 				// On récupère le champ NUMBER de l'enregistrement courant
-				C= rs.getInt("CUSTOM");
-                                NAME= rs.getString("NOM");
-                                ADDRESSLINE1=rs.getString("ADRESS");
-                                CustomerEntity Ce = new CustomerEntity(C,NAME,ADDRESSLINE1);
-                                ListCustom.add(Ce);
+				customer= rs.getInt("CUSTOM");
+                                NOMM= rs.getString("NOM");
+                                ADDRESSE=rs.getString("ADRESSE");
+                                CustomerEntity Ce = new CustomerEntity(customer,NOMM,ADDRESSE);
+                                ListCustomers.add(Ce);
 			}
 
 		}  catch (SQLException ex) {
@@ -179,7 +179,7 @@ public class DAO {
 		}
                 
                 
-                return ListCustom;
+                return ListCustomers;
 	}
 
 }
